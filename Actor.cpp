@@ -422,19 +422,10 @@ void ComplexZumi::doSomething(){
         
         //check if the player is within smell distance
         if (horD<=value&&VerD<=value){
-            if (x<getX())
-                curDir=2;
-            else if(x>getX())
-                curDir=3;
-            else if(y<getY())
-                curDir=1;
-            else curDir=0;
-//            int temp=firstSearch(getX(), 14-getY(), x, 14-y);
-//            
-//            if (temp!=-1)
-//                curDir=temp;
+            if (getDir()!=-1)
+                curDir=getDir();
+
         }
-        
         
         setCount(0);
         move();
@@ -445,100 +436,76 @@ void ComplexZumi::doSomething(){
 class Coord
 {
 public:
-    Coord(int rr, int cc) : m_r(rr), m_c(cc) {}
-    int r() const { return m_r; }
-    int c() const { return m_c; }
+    Coord(int xx, int yy , int  direction) : m_x(xx), m_y(yy) ,dir(direction) {}
+    int x() const { return m_x; }
+    int y() const { return m_y; }
+    int direction(){ return dir;}
 private:
-    int m_r;
-    int m_c;
+    int m_x;
+    int m_y;
+    int dir;
 };
 
 
-
-//first search
-int ComplexZumi::firstSearch(int sr,int sc, int er, int ec){
-    queue<Coord> queue;
-    const char been='0';
-    
-    string maze[15]={"...............","...............","...............","...............","...............","...............","...............","...............","...............","...............","...............","...............","...............","...............","..............."};
-    
-    
-    //push the current coordinate to the queue
-    queue.push(Coord(sr,sc));
-    maze[sr].at(sc)=been;
-    
-    //continue if the stack is not empty
-    while (!queue.empty()){
-        Coord b=queue.front();
-        queue.pop();
-        
-        //return true if the current coord is the destination
-        if (b.r()==er&&b.c()==ec){
-            while(!queue.empty()){
-                Coord c=queue.front();
-                queue.pop();
-                if (c.c()==sc){
-                    if (c.r()==sr+1){
-                        return 0;}
-                    if (c.r()==sr-1){
-                        return 1;
-                    }
-                }
-                if (c.r()==sr){
-                    if (c.c()==sc+1){
-                        return 2;}
-                    if (c.r()==sc-1){
-                        return 3;
-                    }
-                }
+//first serach algorithm
+int ComplexZumi::getDir()
+{
+    char maze[15][15];
+    for(int x=0;x<15;x++){
+        for (int y=0;y<15;y++){
+            { if (getWorld()->zumiAndSprayersBlockedAt(x,y))
+            {
+                maze[14-y][x]='.';
             }
-            
-            return -1;
-//            if (c.c()!=sc)
-//                if(c.c()<sc)
-//                    return 2;
-//                else return 3;
-//            else
-//                if (c.r()<sr)
-//                    return 1;
-//                else return 0;
+            else{
+                maze[14-y][x]=' ';
+            }
+            }
         }
-        
-        //update
-        if (maze[b.r()-1].at(b.c())=='.'&&b.r()>0&&!getWorld()->zumiAndSprayersBlockedAt(b.c(),14-b.r()+1)){
-            maze[b.r()].at(b.c())=been;
-            Coord c(b.r()-1,b.c());
-            queue.push(c);
-        }
-        
-        if (maze[b.r()].at(b.c()+1)=='.'&&b.c()<15-1&&!getWorld()->zumiAndSprayersBlockedAt(b.c()+1,b.r())){
-            maze[b.r()].at(b.c())=been;
-            Coord c(b.r(),b.c()+1);
-            queue.push(c);
-            
-        }
-        
-        if (maze[b.r()+1].at(b.c())=='.'&&b.r()<15-1&&!getWorld()->zumiAndSprayersBlockedAt(b.c(),14-b.r()-1)){
-            maze[b.r()].at(b.c())=been;
-            Coord c(b.r()+1,b.c());
-            queue.push(c);
-            
-        }
-        
-        if (maze[b.r()].at(b.c()-1)=='.'&&b.c()>0&&!getWorld()->zumiAndSprayersBlockedAt(b.c()-1,b.r())){
-            maze[b.r()].at(b.c())=been;
-            Coord c(b.r(),b.c()-1);
-            queue.push(c);
-            
-        }
-        
-        
         
         
     }
     
-    return -1;
+    queue<Coord> q;
+    int x=getX();
+    int y=getY();
+    if(maze[14-y][x+1]!='.')
+        q.push(Coord(x+1,y,3));
+    if (maze[14-y][x-1]!='.')
+        q.push(Coord(x-1,y,2));
+    if (maze[13-y][x]!='.')
+        q.push(Coord(x,y+1,0));
+    if (maze[15-y][x]!='.')
+        q.push(Coord(x,y-1,1));
     
+    while(!q.empty())
+    {
+        Coord b=q.front();
+        q.pop();
+        int x=b.x();
+        int y=b.y();
+        int dir=b.direction();
+        
+        //check if the player is at the same location
+        int x1(-1);
+        int y1(-1);
+        getWorld()->getPlayerLocation(x1,y1);
+        if (x1==x&&y1==y)
+            return dir;
+        
+        maze[14-y][x]='.';
+        if(maze[14-y][x+1]!='.')
+            q.push(Coord(x+1,y,dir));
+        if (maze[14-y][x-1]!='.')
+            q.push(Coord(x-1,y,dir));
+        if (maze[13-y][x]!='.')
+            q.push(Coord(x,y+1,dir));
+        if (maze[15-y][x]!='.')
+            q.push(Coord(x,y-1,dir));
+    }
+    
+    
+    return -1;
 }
 
 
