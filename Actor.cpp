@@ -22,13 +22,10 @@ StudentWorld* Actor::getWorld(){
     return st_p;
 }
 
-//leaves it defnition to the derivded classes;
-
-
-
 bool Actor::isAlive() const{
     return m_alive;
 }
+
 
 
 //player class
@@ -60,8 +57,6 @@ void Player::switchPenetrateWall(){
         penetrateWall=false;
     else penetrateWall=true;
 }
-
-
 
 //set the number of tick player can have while being able to walk through the wall
 void Player::setTickWall(int n){
@@ -102,12 +97,10 @@ void Player::penetrate_moveDir(int dir){
                     bugSprayerUsed++;
                     getWorld()->addActor(new BugSprayer(IID_BUGSPRAYER,getX(),getY(),getWorld()));}
             break;
-            
     }
 }
 
 void Player::moveDir(int dir){
-    
         // user hit a key this tick!
         switch (dir) {
             case KEY_PRESS_UP:
@@ -131,7 +124,6 @@ void Player::moveDir(int dir){
                         bugSprayerUsed++;
                         getWorld()->addActor(new BugSprayer(IID_BUGSPRAYER,getX(),getY(),getWorld()));}
                  break;
-            
         }
 }
 
@@ -139,12 +131,10 @@ void Player::moveDir(int dir){
 void Player::applyBugSpray(){
     getWorld()->playSound(SOUND_PLAYER_DIE);
     getWorld()->decLives();
-
     setDead();
 }
 
 void Player::doSomething(){
-
     if (!isAlive()){
         return;
     }
@@ -197,10 +187,7 @@ void Player::doSomething(){
             moveDir(dir);
         }
     }
-    
-    
 }
-
 
 
 
@@ -584,9 +571,7 @@ void Exit::doSomething(){
             
             //give bonus point
             getWorld()->increaseScore(getWorld()->getBonus());
-            
         }
-        
     }
 }
 
@@ -659,10 +644,8 @@ void BugSprayer::addBugSprays(){
 
 }
 
+
 //explode the bug sprayer and decrease the player's bug sprayer used by one
-
-
-
 void BugSprayer::doSomething(){
     if (!isAlive())
         return;
@@ -685,6 +668,7 @@ void BugSprayer::applyBugSpray(){
     doSomething();
     setDead();
 }
+
 
 
 //bugspray class
@@ -822,7 +806,5 @@ void IncreaseSimultaneousSprayersGoodie::doSomething(){
         }
     }
 }
-
-
 
     
