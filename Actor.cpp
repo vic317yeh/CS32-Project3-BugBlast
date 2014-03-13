@@ -449,8 +449,6 @@ int ComplexZumi::getDir()
             }
             }
         }
-        
-        
     }
     
     queue<Coord> q;
@@ -503,18 +501,14 @@ void ComplexZumi::move(){
             if (!getWorld()->zumiAndSprayersBlockedAt(getX(),getY()+1)){
                 moveTo(getX(),getY()+1);
             }
-            
             else curDir=rand()%4;
-            
             break;
             //down
         case 1:
             if (!getWorld()->zumiAndSprayersBlockedAt(getX(),getY()-1)){
                 moveTo(getX(),getY()-1);
             }
-            
             else curDir=rand()%4;
-            
             break;
             
             //left
@@ -522,9 +516,7 @@ void ComplexZumi::move(){
             if (!getWorld()->zumiAndSprayersBlockedAt(getX()-1,getY())){
                 moveTo(getX()-1,getY());
             }
-            
             else curDir=rand()%4;
-            
             break;
             
             
@@ -535,7 +527,6 @@ void ComplexZumi::move(){
             }
             
             else curDir=rand()%4;
-            
             break;
             
         default:break;
