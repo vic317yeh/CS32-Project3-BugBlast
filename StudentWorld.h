@@ -21,11 +21,11 @@ public:
     
     virtual ~StudentWorld();
     
-	virtual int init();
+    virtual int init();
 
-	virtual int move();
+    virtual int move();
 
-	virtual void cleanUp();
+    virtual void cleanUp();
     
     int loadLevel();
     
