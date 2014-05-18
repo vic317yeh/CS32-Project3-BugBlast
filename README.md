@@ -1,7 +1,7 @@
 CS32-BugBlast
 ======================
 
-CS32: BugBlast
+CS32 project 3: BugBlast
 
 The framework is provided by my professor. 
 My job is to write the Actor.h, Actor.cpp (contain all game objects' declarations and implementations), StudentWorld.h, and StudentWorld.cpp (contain implementations for the overall rules of the game) using the exisitng files.
